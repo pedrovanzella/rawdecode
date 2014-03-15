@@ -26,6 +26,14 @@ if __name__ == "__main__":
 
     _, filename = argv
 
-    with Image(filename=filename) as img:
+    try:
+        with open(filename) as f:
+            image_binary = f.read()
+    except IOError:
+        print("Could not open file named %s", filename)
+        exit()
+
+    with Image(blob=image_binary) as img:
         print('width = ', img.width)
         print('height = ', img.height)
+        display(img)
