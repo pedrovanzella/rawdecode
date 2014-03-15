@@ -1,19 +1,26 @@
 from sys import argv
 
-def demosaic(rf):
-    pass
 
-def whitebalance(rf):
-    pass
+def demosaic(rfile):
+    """Demosaics a raw image file"""
+    return rfile
 
-def gammacompress(rf):
-    pass
+
+def whitebalance(rfile):
+    """Whitebalances a demosaiced image file"""
+    return rfile
+
+
+def gammacompress(rfile):
+    """Applies gamma compression to a demosaiced image file"""
+    return rfile
+
 
 if __name__ == "__main__":
     if len(argv) <= 1:
         print "Usage: %s filename.dng" % argv[0]
         exit()
-        
+
     _, filename = argv
 
     try:
