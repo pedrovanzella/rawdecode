@@ -1,4 +1,7 @@
+from __future__ import print_function
 from sys import argv
+from wand.image import Image
+from wand.display import display
 
 
 def demosaic(rfile):
@@ -18,19 +21,11 @@ def gammacompress(rfile):
 
 if __name__ == "__main__":
     if len(argv) <= 1:
-        print "Usage: %s filename.dng" % argv[0]
+        print("Usage: %s filename.dng", argv[0])
         exit()
 
     _, filename = argv
 
-    try:
-        rawfile = open(filename)
-    except IOError:
-        print "Could not open file named %s" % filename
-        exit()
-
-    demosaiced_file = demosaic(rawfile)
-    whitebalanced_file = whitebalance(demosaiced_file)
-    gammacompressed_file = gammacompress(whitebalanced_file)
-
-    rawfile.close()
+    with Image(filename=filename) as img:
+        print('width = ', img.width)
+        print('height = ', img.height)
