@@ -1,12 +1,12 @@
 from sys import argv
 
-def demosaic(file):
+def demosaic(rf):
     pass
 
-def whitebalance(file):
+def whitebalance(rf):
     pass
 
-def gammacompress(file):
+def gammacompress(rf):
     pass
 
 if __name__ == "__main__":
