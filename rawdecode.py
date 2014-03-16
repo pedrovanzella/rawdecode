@@ -22,12 +22,15 @@ def gammacompress(rfile):
 
 if __name__ == "__main__":
     if len(argv) <= 1:
-        print("Usage: %s filename.dng", argv[0])
+        print("Usage: %s filename.tiff", argv[0])
+        print("To convert from dng to tiff, use 'dcraw -D -T <image.dng>")
         exit()
 
     _, filename = argv
 
     img = mpimg.imread(filename)
     print(img)
+
+    # Show Grayscale image
     plt.imshow(img, cmap='gray')
     plt.show()
