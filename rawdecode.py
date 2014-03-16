@@ -1,5 +1,7 @@
 from __future__ import print_function
 from sys import argv
+from wand.image import Image
+from wand.display import display
 
 
 def demosaic(rfile):
@@ -30,3 +32,8 @@ if __name__ == "__main__":
     except IOError:
         print("Could not open file named %s", filename)
         exit()
+
+    with Image(blob=image_binary) as img:
+        print('width = ', img.width)
+        print('height = ', img.height)
+        display(img)
