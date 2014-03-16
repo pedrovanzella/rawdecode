@@ -2,7 +2,6 @@ from __future__ import print_function
 from sys import argv
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
-import Image
 import numpy as np
 
 
@@ -28,6 +27,6 @@ if __name__ == "__main__":
 
     _, filename = argv
 
-    im = Image.open(filename)
-    print(im.info)
-    im.show()
+    img = mpimg.imread(filename)
+    plt.imshow(img)
+    plt.show()
