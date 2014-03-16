@@ -28,5 +28,6 @@ if __name__ == "__main__":
     _, filename = argv
 
     img = mpimg.imread(filename)
-    plt.imshow(img)
+    print(img)
+    plt.imshow(img, cmap='gray')
     plt.show()
