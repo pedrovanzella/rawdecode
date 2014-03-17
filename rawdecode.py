@@ -7,7 +7,26 @@ import numpy as np
 
 def demosaic(rfile):
     """Demosaics a raw image file"""
-    return rfile
+    r = np.empty_like(rfile)
+    g = np.empty_like(rfile)
+    b = np.empty_like(rfile)
+    reconstructed = np.empty([len(rfile), len(rfile[0]), 3])
+
+    for x in range(0, len(rfile)):
+        for y in range(0, len(rfile[0])):
+            if x % 2 != 0 and y % 2 != 0:
+                g[x][y] = rfile[x][y]
+
+    print("RED:")
+    print(r)
+
+    print("GREEN:")
+    print(g)
+
+    print("BLUE:")
+    print(b)
+
+    return reconstructed
 
 
 def whitebalance(rfile):
@@ -29,8 +48,11 @@ if __name__ == "__main__":
     _, filename = argv
 
     img = mpimg.imread(filename)
+
     print(img)
 
     # Show Grayscale image
     plt.imshow(img, cmap='gray')
     plt.show()
+
+    desmosaiced_file = demosaic(img)
