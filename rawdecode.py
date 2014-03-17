@@ -7,9 +7,6 @@ import numpy as np
 
 def demosaic(rfile):
     """Demosaics a raw image file"""
-    r = np.empty_like(rfile)
-    g = np.empty_like(rfile)
-    b = np.empty_like(rfile)
     reconstructed = np.empty([len(rfile), len(rfile[0]), 3])
 
     for x in range(0, len(rfile)):
@@ -18,29 +15,80 @@ def demosaic(rfile):
                 # Even line, Blue-Green
                 if y % 2 == 0:
                     # Blue
-                    b[x][y] = rfile[x][y]
+                    reconstructed[x][y][0] = interpolate_red_blue(rfile, x, y)
+                    reconstructed[x][y][1] = interpolate_green(rfile, x, y)
+                    reconstructed[x][y][2] = rfile[x][y]
                 else:
                     # Green
-                    g[x][y] = rfile[x][y]
+                    reconstructed[x][y][0] = interpolate_red_blue(rfile, x, y)
+                    reconstructed[x][y][1] = rfile[x][y]
+                    reconstructed[x][y][2] = interpolate_red_blue(rfile, x, y)
             else:
                 # Odd line: Green-Red
                 if y % 2 == 0:
                     # Green
-                    g[x][y] = rfile[x][y]
+                    reconstructed[x][y][0] = interpolate_red_blue(rfile, x, y)
+                    reconstructed[x][y][1] = rfile[x][y]
+                    reconstructed[x][y][2] = interpolate_red_blue(rfile, x, y)
                 else:
                     # Red
-                    r[x][y] = rfile[x][y]
-
-    print("RED:")
-    print(r)
-
-    print("GREEN:")
-    print(g)
-
-    print("BLUE:")
-    print(b)
+                    reconstructed[x][y][0] = rfile[x][y]
+                    reconstructed[x][y][1] = interpolate_green(rfile, x, y)
+                    reconstructed[x][y][2] = interpolate_red_blue(rfile, x, y)
 
     return reconstructed
+
+
+def interpolate_red_blue(rfile, x, y):
+    r = 0
+
+    topleft = 0
+    if x > 0 and y > 0:
+        # There is a pixel to the top left
+        topleft = int(rfile[x - 1][y - 1])
+
+    bottomleft = 0
+    if x > 0 and y < len(rfile[0]) - 1:
+        # There is a pixel to the bottom left
+        bottomleft = int(rfile[x - 1][y + 1])
+
+    topright = 0
+    if x < len(rfile) - 1 and y > 0:
+        # There is a pixel to the top right
+        topright = int(rfile[x + 1][y - 1])
+
+    bottomright = 0
+    if x < len(rfile) - 1 and y < len(rfile[0]) - 1:
+        # There is a pixel to the bottom right
+        bottomright = int(rfile[x + 1][y + 1])
+
+    r = (topleft + bottomleft + topright + bottomright) / 4
+
+    return r
+
+
+def interpolate_green(rfile, x, y):
+    g = 0
+
+    top = 0
+    if y > 0:
+        top = int(rfile[x][y - 1])
+
+    left = 0
+    if x > 0:
+        left = int(rfile[x - 1][y])
+
+    bottom = 0
+    if y < len(rfile[0]) - 1:
+        bottom = int(rfile[x][y + 1])
+
+    right = 0
+    if x < len(rfile) - 1:
+        right = int(rfile[x + 1][y])
+
+    g = (top + left + bottom + right) / 4
+
+    return g
 
 
 def whitebalance(rfile):
@@ -69,4 +117,6 @@ if __name__ == "__main__":
     plt.imshow(img, cmap='gray')
     plt.show()
 
-    desmosaiced_file = demosaic(img)
+    demosaiced_file = demosaic(img)
+    plt.imshow(demosaiced_file)
+    plt.show()
