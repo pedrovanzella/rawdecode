@@ -14,8 +14,22 @@ def demosaic(rfile):
 
     for x in range(0, len(rfile)):
         for y in range(0, len(rfile[0])):
-            if x % 2 != 0 and y % 2 != 0:
-                g[x][y] = rfile[x][y]
+            if x % 2 == 0:
+                # Even line, Blue-Green
+                if y % 2 == 0:
+                    # Blue
+                    b[x][y] = rfile[x][y]
+                else:
+                    # Green
+                    g[x][y] = rfile[x][y]
+            else:
+                # Odd line: Green-Red
+                if y % 2 == 0:
+                    # Green
+                    g[x][y] = rfile[x][y]
+                else:
+                    # Red
+                    r[x][y] = rfile[x][y]
 
     print("RED:")
     print(r)
