@@ -3,6 +3,7 @@ from sys import argv
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import numpy as np
+import cv2
 
 
 def demosaic(rfile):
@@ -117,6 +118,11 @@ if __name__ == "__main__":
     plt.imshow(img, cmap='gray')
     plt.show()
 
-    demosaiced_file = demosaic(img)
-    plt.imshow(demosaiced_file)
-    plt.show()
+    # demosaiced_file = demosaic(img)
+    # plt.imshow(demosaiced_file)
+    # plt.show()
+    debayer = cv2.cvtColor(img, cv2.COLOR_BAYER_BG2BGR)
+    resized = cv2.resize(debayer, (0, 0), fx=0.3, fy=0.3)
+    cv2.imshow('image', resized)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
