@@ -94,12 +94,17 @@ def interpolate_green(rfile, x, y):
 
 def whitebalance(rfile):
     """Whitebalances a demosaiced image file"""
-    return rfile
+    # We'll be using the hardcoded pixel value of (871, 558)
+    print(rfile)
+    result = [(r, g, b) for r in rfile[:, :, 0] for g in rfile[:, :, 1] for b in rfile[:, :, 2]]
+    print(result)
+    return result
 
 
 def gammacompress(rfile):
     """Applies gamma compression to a demosaiced image file"""
-    return rfile
+    result = np.exp(rfile, 1 / 2.2)
+    return result
 
 
 if __name__ == "__main__":
@@ -112,8 +117,6 @@ if __name__ == "__main__":
 
     img = mpimg.imread(filename)
 
-    print(img)
-
     # Show Grayscale image
     plt.imshow(img, cmap='gray')
     plt.show()
@@ -121,8 +124,18 @@ if __name__ == "__main__":
     # demosaiced_file = demosaic(img)
     # plt.imshow(demosaiced_file)
     # plt.show()
+
     debayer = cv2.cvtColor(img, cv2.COLOR_BAYER_BG2BGR)
     resized = cv2.resize(debayer, (0, 0), fx=0.3, fy=0.3)
-    cv2.imshow('image', resized)
+    cv2.imshow('debayered', resized)
+
+    #whitebalanced = whitebalance(debayer)
+    #resized = cv2.resize(whitebalanced, (0, 0), fx=0.3, fy=0.3)
+    #cv2.imshow('whitebalanced', resized)
+
+    #gammacorrected = gammacompress(debayer)
+    #resized = cv2.resize(gammacorrected, (0, 0), fx=0.3, fy=0.3)
+    #cv2.imshow('gammacorrected', resized)
+
     cv2.waitKey(0)
     cv2.destroyAllWindows()
